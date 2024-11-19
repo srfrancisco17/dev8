@@ -1,10 +1,12 @@
 <div>
-    <section class="flex flex-col items-center space-y-4 py-12">
-        <h1 class="text-3xl font-bold underline">
-            {{$welcome}}
-        </h1>
+    <section>
         @if (session()->has('message'))
-            <h3 class="bg-blue-400 font-bold p-2 w-1/3 rounded text-center text-sm text-white">{{session('message')}}</h3>
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                {{session('message')}}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
         @endif
         <livewire:task />
     </section>

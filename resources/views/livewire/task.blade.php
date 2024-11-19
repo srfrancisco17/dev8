@@ -1,34 +1,52 @@
 <div>
-    <form class="p-4" wire:submit.prevent="save">
-        <div class="mb-4">
-            <input wire:model="task.text" class="p-2 bg-gray-200 w-full" placeholder="Tarea...">
+    <style>
+        .custom-check {
+          transform: scale(1.5); /* Adjust the scale value to make the checkbox larger */
+          transform-origin: top left; /* Ensures the checkbox scales from its top-left corner */
+          cursor: pointer;
+        }
+    </style>    
+    <form class="form" wire:submit.prevent="save">
+        <div class="form-group">
+            <label for="task">Tarea:</label>
+            <input id="task" wire:model="task.text" class="form-control" placeholder="Tarea..."/>
             @error('task.text')
-                <div class="mt-1 text-red-600 text-sm">{{$message}}</div>
+                <div class="alert alert-danger" role="alert">{{$message}}</div>
             @enderror
         </div>
-        <button type="submit" class="bg-indigo-700 text-white font-bold w-full rounded shadow p-2">Guardar</button>
+        <button type="submit" class="btn btn-success mb-2"><i class="bi bi-floppy"></i> Guardar</button>
     </form>
-    <table class="shadow-md">
-        <thead>
-            <tr class="bg-gray-200 text-gray-600 uppercase text-sm">
-                <th class="py-3 px-6 text-left">Hecha</th>
-                <th class="py-3 px-6 text-left">Tarea</th>
-                <th class="py-3 px-6 text-left">&nbsp;</th>
-            </tr>
-        </thead>
-        <tbody class="text-gray-600">
-            @forelse ($tasks as $task)
-                <tr class="border-b border-gray-200 {{$task->done ? 'bg-green-200' : ''}}">
-                    <td class="px-4 py-2"><input type="checkbox" wire:click="done({{$task->id}})" {{$task->done ? 'checked' : ''}}></td>
-                    <td class="px-4 py-2 {{$task->done ? 'line-through' : ''}}">{{$task->text}}</td>
-                    <td class="px-4 py-2">
-                        <button wire:click="edit({{$task->id}})" type="button" class="bg-indigo-400 px-2 py-1 text-white text-xs rounded">Editar</button>
-                        <button wire:click="delete({{$task->id}})" type="button" class="bg-red-500 px-2 py-1 text-white text-xs rounded">Eliminar</button>
-                    </td>
-                </tr>                
-            @empty
-                <h3>No existen tareas para mostrar.</h3>
-            @endforelse
-        </tbody>
-    </table>
+
+    <div class="card">
+        <div class="card-header">
+            Listado de tareas
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col" >Hecha</th>
+                        <th scope="col" style="width:70%">Tarea</th>
+                        <th scope="col" style="width:20%">&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($tasks as $task)
+                        <tr class="border-b border-gray-200 {{$task->done ? 'table-success' : ''}}">
+                            <td><input type="checkbox" wire:click="done({{$task->id}})" {{$task->done ? 'checked' : ''}} class="custom-check"></td>
+                            <td style="{{$task->done ? 'text-decoration: line-through;' : ''}}">{{$task->text}}</td>
+                            <td>
+                                <button wire:click="edit({{$task->id}})" type="button" class="btn btn-primary"><i class="bi bi-pencil"></i> Editar</button>
+                                <button wire:click="delete({{$task->id}})" type="button" class="btn btn-danger"><i class="bi bi-trash"></i> Eliminar</button>
+                            </td>
+                        </tr>                
+                    @empty
+                        <h3>No existen tareas para mostrar.</h3>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
 </div>
